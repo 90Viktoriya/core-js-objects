@@ -134,8 +134,14 @@ function makeImmutable(obj) {
  *    makeWord({ a: [0, 1], b: [2, 3], c: [4, 5] }) => 'aabbcc'
  *    makeWord({ H:[0], e: [1], l: [2, 3, 8], o: [4, 6], W:[5], r:[7], d:[9]}) => 'HelloWorld'
  */
-function makeWord(/* lettersObject */) {
-  throw new Error('Not implemented');
+function makeWord(lettersObject) {
+  const result = new Array(Object.values(lettersObject).flat().length);
+  Object.entries(lettersObject).forEach(([key, value]) => {
+    value.forEach((element) => {
+      result[element] = key;
+    });
+  });
+  return result.join('');
 }
 
 /**
@@ -152,8 +158,28 @@ function makeWord(/* lettersObject */) {
  *    sellTickets([25, 25, 50]) => true
  *    sellTickets([25, 100]) => false (The seller does not have enough money to give change.)
  */
-function sellTickets(/* queue */) {
-  throw new Error('Not implemented');
+function sellTickets(queue) {
+  const money = { 25: 0, 50: 0, 100: 0 };
+  let result = true;
+  let i = 0;
+  while (i < queue.length && result) {
+    switch (queue[i]) {
+      case 25:
+        money[25] += 1;
+        break;
+      case 50:
+        money[50] += 1;
+        money[25] -= 1;
+        break;
+      default:
+        money[100] += 1;
+        if (money[50] > 0) money[50] -= 1;
+        else money[25] -= 2;
+    }
+    if (money[25] < 0) result = false;
+    i += 1;
+  }
+  return result;
 }
 
 /**
@@ -169,8 +195,19 @@ function sellTickets(/* queue */) {
  *    console.log(r.height);      // => 20
  *    console.log(r.getArea());   // => 200
  */
-function Rectangle(/* width, height */) {
-  throw new Error('Not implemented');
+function Rectangle(width, height) {
+  class Rect {
+    constructor(w, h) {
+      this.width = w;
+      this.height = h;
+    }
+
+    getArea() {
+      return this.width * this.height;
+    }
+  }
+  const result = new Rect(width, height);
+  return result;
 }
 
 /**
