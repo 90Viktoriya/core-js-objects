@@ -18,7 +18,8 @@
  *    shallowCopy({}) => {}
  */
 function shallowCopy(obj) {
-  const copyobj = Object.assign(obj);
+  const copyobj = {};
+  Object.assign(copyobj, obj);
   return copyobj;
 }
 
@@ -34,9 +35,15 @@ function shallowCopy(obj) {
  *    mergeObjects([]) => {}
  */
 function mergeObjects(objects) {
-  const result = { ...objects };
+  const result = {};
+  for (let i = 0; i < objects.length; i += 1)
+    Object.entries(objects[i]).forEach(([key, value]) => {
+      if (result[key]) result[key] += value;
+      else result[key] = value;
+    });
   return result;
 }
+
 /**
  * Removes a properties from an object.
  *
@@ -50,8 +57,12 @@ function mergeObjects(objects) {
  *    removeProperties({name: 'John', age: 30, city: 'New York'}, 'age') => {name: 'John', city: 'New York'}
  *
  */
-function removeProperties(/* obj, keys */) {
-  throw new Error('Not implemented');
+function removeProperties(obj, keys) {
+  const result = { ...obj };
+  keys.forEach((element) => {
+    delete result[element];
+  });
+  return result;
 }
 
 /**
@@ -66,8 +77,13 @@ function removeProperties(/* obj, keys */) {
  *    compareObjects({a: 1, b: 2}, {a: 1, b: 2}) => true
  *    compareObjects({a: 1, b: 2}, {a: 1, b: 3}) => false
  */
-function compareObjects(/* obj1, obj2 */) {
-  throw new Error('Not implemented');
+function compareObjects(obj1, obj2) {
+  if (obj1.length !== obj2.length) return false;
+  let result = true;
+  Object.entries(obj1).forEach(([key, value]) => {
+    if (obj2[key] !== value) result = false;
+  });
+  return result;
 }
 
 /**
