@@ -220,8 +220,9 @@ function Rectangle(width, height) {
  *    [1,2,3]   =>  '[1,2,3]'
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
-function getJSON(/* obj */) {
-  throw new Error('Not implemented');
+function getJSON(obj) {
+  const result = JSON.stringify(obj);
+  return result;
 }
 
 /**
@@ -235,8 +236,14 @@ function getJSON(/* obj */) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
+
+function fromJSON(proto, json) {
+  const result = Object.create(proto);
+  const obj = JSON.parse(json);
+  Object.entries(obj).forEach(([key, value]) => {
+    result[key] = value;
+  });
+  return result;
 }
 
 /**
@@ -299,8 +306,16 @@ function sortCitiesArray(/* arr */) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const result = new Map();
+  array.forEach((element) => {
+    if (result.has(keySelector(element))) {
+      const value = result.get(keySelector(element));
+      value.push(valueSelector(element));
+      result.set(keySelector(element), value);
+    } else result.set(keySelector(element), Array(valueSelector(element)));
+  });
+  return result;
 }
 
 /**
